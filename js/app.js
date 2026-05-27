@@ -117,7 +117,7 @@ let appState = {
     copies: 0,
     likedServices: new Set(),
     callHistory: [],
-    language: "bn" // default language is Bengali as in the first screenshot
+    language: "bn"
 };
 
 // DOM Cache Elements
@@ -196,7 +196,7 @@ function renderCards() {
         </button>
       </div>
 
-      <!-- Service Info - Left Aligned exactly as the screenshot -->
+      <!-- Service Info - Left Aligned  -->
       <div class="flex flex-col items-start text-left my-2 pl-1">
         <h3 class="text-[19px] font-black text-slate-900 font-sans leading-tight mb-1">
           ${appState.language === 'bn' ? service.nameBn : service.nameEn}
@@ -207,7 +207,7 @@ function renderCards() {
         <div class="text-[26px] font-black text-slate-900 font-sans leading-none tracking-tight mb-3">
           ${service.number}
         </div>
-        <!-- Pill shaped category badge left-aligned and styled exactly as screenshots -->
+        <!-- Pill shaped category badge left-aligned and styled  -->
         <span class="text-slate-500 bg-slate-100 rounded-full px-3.5 py-1 text-[10px] font-bold uppercase select-none font-sans">
           ${appState.language === 'bn' ? service.categoryBn : service.categoryEn}
         </span>
@@ -314,7 +314,7 @@ function toggleLanguage() {
 
     // Update Sidebar Title and Fallback
     if (elements.sidebarTitle) {
-        elements.sidebarTitle.textContent = "Call History"; // Keep Call History in English in both screenshots!
+        elements.sidebarTitle.textContent = "Call History";
     }
 
     // Re-render Cards & History
@@ -501,3 +501,66 @@ function renderHistory() {
     });
 }
 
+
+// Clear all items in call history
+function clearCallHistory() {
+    appState.callHistory = [];
+
+    if (elements.historyList) {
+        elements.historyList.innerHTML = "";
+    }
+
+    if (elements.emptyHistoryPlaceholder) {
+        elements.emptyHistoryPlaceholder.classList.remove("hidden");
+    }
+
+    showToast(appState.language === "bn" ? "কল হিস্ট্রি মুছে ফেলা হয়েছে" : "Call history cleared", "info");
+}
+
+// Premium dynamic Custom Toast notification system
+function showToast(message, type = "info") {
+    // Remove existing toasts first to prevent overlaps
+    const existingToasts = document.querySelectorAll(".custom-toast");
+    existingToasts.forEach(toast => toast.remove());
+
+    // Create toast container
+    const toast = document.createElement("div");
+    toast.className = "custom-toast font-sans font-semibold text-sm";
+
+    // Styles based on notification type
+    if (type === "success") {
+        toast.className += " bg-emerald-50 border border-emerald-100 text-emerald-700";
+        toast.innerHTML = `
+      <svg class="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span>${message}</span>
+    `;
+    } else if (type === "error") {
+        toast.className += " bg-rose-50 border border-rose-100 text-rose-700 animate-pulse-glow";
+        toast.innerHTML = `
+      <svg class="w-5 h-5 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+      </svg>
+      <span>${message}</span>
+    `;
+    } else {
+        toast.className += " bg-indigo-50 border border-indigo-100 text-indigo-700";
+        toast.innerHTML = `
+      <svg class="w-5 h-5 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span>${message}</span>
+    `;
+    }
+
+    document.body.appendChild(toast);
+
+    // Auto-remove toast after 3 seconds with slide-out animation
+    setTimeout(() => {
+        toast.classList.add("hide");
+        toast.addEventListener("animationend", () => {
+            toast.remove();
+        });
+    }, 3000);
+}
