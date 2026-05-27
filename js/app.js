@@ -117,7 +117,7 @@ let appState = {
     copies: 0,
     likedServices: new Set(),
     callHistory: [],
-    language: "bn"
+    language: "bn" // default language is Bengali 
 };
 
 // DOM Cache Elements
@@ -157,7 +157,6 @@ function cacheDOM() {
         sidebarTitle: document.getElementById("sidebar-title")
     };
 }
-
 
 // Dynamically Render Hotline Cards in the main grid
 function renderCards() {
@@ -207,7 +206,7 @@ function renderCards() {
         <div class="text-[26px] font-black text-slate-900 font-sans leading-none tracking-tight mb-3">
           ${service.number}
         </div>
-        <!-- Pill shaped category badge left-aligned and styled  -->
+        <!-- Pill shaped category badge left-aligned and styled -->
         <span class="text-slate-500 bg-slate-100 rounded-full px-3.5 py-1 text-[10px] font-bold uppercase select-none font-sans">
           ${appState.language === 'bn' ? service.categoryBn : service.categoryEn}
         </span>
@@ -238,7 +237,6 @@ function renderCards() {
         elements.cardsContainer.appendChild(card);
     });
 }
-
 
 // Setup Event Listeners incorporating EVENT DELEGATION
 function setupEventListeners() {
@@ -297,7 +295,6 @@ function setupEventListeners() {
     }
 }
 
-
 // Language Toggling Logic
 function toggleLanguage() {
     appState.language = appState.language === "bn" ? "en" : "bn";
@@ -314,7 +311,7 @@ function toggleLanguage() {
 
     // Update Sidebar Title and Fallback
     if (elements.sidebarTitle) {
-        elements.sidebarTitle.textContent = "Call History";
+        elements.sidebarTitle.textContent = "Call History"; // Keep Call History in English 
     }
 
     // Re-render Cards & History
@@ -368,7 +365,7 @@ function toggleHeart(button, serviceId) {
     updateNavbarCounters();
 }
 
-// Copy Hotline Number and update counters 
+// Copy Hotline Number and update counters
 function copyServiceToClipboard(serviceId) {
     const service = HOTLINE_SERVICES.find(s => s.id === serviceId);
     if (!service) return;
@@ -401,6 +398,7 @@ function initiateCall(serviceId) {
         showToast(appState.language === "bn" ? "পর্যাপ্ত কয়েন নেই! কল করতে ২০ 🪙 প্রয়োজন।" : "Insufficient Coins! Call costs 20 🪙.", "error");
         return;
     }
+
     // Deduct 20 coins
     appState.coins -= 20;
     updateNavbarCounters();
@@ -472,7 +470,7 @@ function renderHistory() {
 
         const name = appState.language === "bn" ? service.nameBn : service.nameEn;
 
-        // Create list item element 
+        // Create list item element exactly matching history items 
         const item = document.createElement("div");
         item.className = "flex items-center justify-between p-3.5 rounded-2xl bg-white border border-slate-100 hover:border-slate-200 transition-all duration-300 gap-3 animate-slide-up shadow-sm";
 
@@ -500,7 +498,6 @@ function renderHistory() {
         elements.historyList.appendChild(item);
     });
 }
-
 
 // Clear all items in call history
 function clearCallHistory() {

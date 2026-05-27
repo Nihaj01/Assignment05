@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> জরূরী সেবা - Joruri Seba </title>
+    <title> জরুরী সেবা </title>
 
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -35,6 +35,7 @@
 </head>
 
 <body class="bg-slate-50 text-slate-700 min-h-screen flex flex-col antialiased">
+
     <!-- 1. Sticky Glassmorphic Navbar -->
     <header
         class="sticky top-0 z-50 backdrop-blur-md bg-white/95 border-b border-slate-100/80 shadow-sm transition-all duration-300">
@@ -197,6 +198,72 @@
         </div>
     </main>
 
+    <!-- 4. Interactive Call Simulation Overlay Modal -->
+    <div id="call-modal" class="modal-overlay">
+        <div
+            class="modal-content bg-slate-900 border border-slate-800 text-white rounded-[32px] p-8 max-w-sm w-full mx-4 flex flex-col items-center text-center shadow-2xl relative overflow-hidden">
+
+            <!-- Concentric animated glowing calling rings -->
+            <div class="relative w-32 h-32 flex items-center justify-center mb-8">
+                <div class="absolute inset-0 rounded-full bg-indigo-500/10 animate-ping"
+                    style="animation-duration: 2s;"></div>
+                <div class="absolute inset-2 rounded-full bg-indigo-500/20 animate-ping"
+                    style="animation-duration: 3s; animation-delay: 0.5s;"></div>
+
+                <!-- Service Avatar wrapper inside modal -->
+                <div
+                    class="w-24 h-24 rounded-full bg-white flex items-center justify-center p-5 shadow-lg border border-slate-800/80 z-10 animate-pulse-glow">
+                    <img id="modal-service-icon" src="assets/emergency.png" alt="Calling Icon"
+                        class="w-full h-full object-contain filter drop-shadow-sm">
+                </div>
+            </div>
+
+            <!-- Calling Text and dynamic name displays -->
+            <h3 class="text-xs uppercase tracking-widest font-extrabold text-indigo-400 animate-pulse mb-2">
+                সংযোগ করা হচ্ছে... / Calling
+            </h3>
+            <h2 id="modal-service-name" class="text-xl font-bold text-slate-100 font-sans truncate max-w-full px-2">
+                National Emergency
+            </h2>
+            <p id="modal-service-number"
+                class="text-2xl font-extrabold text-emerald-400 font-mono tracking-widest mt-2 mb-8">
+                999
+            </p>
+
+            <!-- Hang Up Button -->
+            <button id="hangup-btn"
+                class="w-full py-4 px-6 rounded-2xl bg-rose-500 hover:bg-rose-600 text-white font-extrabold text-sm shadow-lg shadow-rose-500/20 transition-all duration-300 flex items-center justify-center gap-2 focus:outline-none active:scale-[0.98]">
+                <svg class="w-5 h-5 transform rotate-[135deg]" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                কল কেটে দিন (Hang Up)
+            </button>
+
+            <!-- Visual indicator of network connection -->
+            <div
+                class="mt-6 flex items-center justify-center gap-1.5 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                Secured Connection
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer Info -->
+    <footer
+        class="bg-slate-900 border-t border-slate-800 py-6 text-center text-slate-500 text-xs font-medium mt-12 font-sans">
+        <div class="container mx-auto px-4">
+            <p>© 2026 সরাসরি হেল্পলাইন - Bangladesh Emergency Directory. All Rights Reserved.</p>
+            <p class="text-[10px] text-slate-600 mt-1">Built with Vanilla HTML, CSS, and JS (Zero-framework Front-end
+                System).
+            </p>
+        </div>
+    </footer>
+
+    <!-- App logic integration -->
+    <script src="js/app.js"></script>
 </body>
 
 </html>
