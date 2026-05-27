@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="bn" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> জরূরী সেবা - Joruri Seba </title>
+
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom CSS stylesheet link -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <script>
+        // Customize Tailwind Configuration to align with our brand colors
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'Hind Siliguri', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            red: '#ef4444',
+                            blue: '#3b82f6',
+                            amber: '#f59e0b',
+                            rose: '#f43f5e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-slate-50 text-slate-700 min-h-screen flex flex-col antialiased">
+    <!-- 1. Sticky Glassmorphic Navbar -->
+    <header
+        class="sticky top-0 z-50 backdrop-blur-md bg-white/95 border-b border-slate-100/80 shadow-sm transition-all duration-300">
+        <div class="container mx-auto px-4 max-w-7xl h-20 flex items-center justify-between">
+
+            <!-- Brand Logo & Name (Left) -->
+            <a href="#" class="flex items-center gap-3.5 group focus:outline-none">
+                <div
+                    class="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center p-2.5 transition-all duration-300 group-hover:scale-105 group-hover:bg-indigo-100/50 shadow-sm">
+                    <img src="assets/logo.png" alt="Shorashori Logo" class="w-full h-full object-contain">
+                </div>
+                <div class="flex flex-col">
+                    <span
+                        class="text-lg font-black text-[#006747] tracking-tight leading-tight group-hover:text-emerald-400 transition-colors duration-300 font-sans">
+                        Emergency <br> Service
+                    </span>
+                </div>
+            </a>
+
+            <!-- State Counters / Status Badges (Right) -->
+            <div class="flex items-center gap-3 sm:gap-4 font-sans">
+
+                <!-- Language Toggle Button -->
+                <button id="lang-btn"
+                    class="px-4 py-1.5 rounded-full text-xs font-black bg-[#006747] text-white hover:bg-emerald-700 transition-all border border-emerald-600 shadow-sm cursor-pointer focus:outline-none">
+                    English
+                </button>
+
+                <!-- Liked Hearts Count Badge -->
+                <div
+                    class="flex items-center gap-1.5 bg-white border border-slate-200 px-3 py-1.5 rounded-full shadow-sm text-sm font-extrabold text-slate-700">
+                    <span id="hearts-count">0</span>
+                    <span class="text-rose-500">❤️</span>
+                </div>
+
+                <!-- Coin Balance Badge -->
+                <div
+                    class="flex items-center gap-1.5 bg-white border border-slate-200 px-3 py-1.5 rounded-full shadow-sm text-sm font-extrabold text-slate-700">
+                    <span id="coins-count">100</span>
+                    <span class="text-amber-500 animate-pulse">🪙</span>
+                </div>
+
+                <!-- Copy Count Badge (Green Pill Button) -->
+                <div
+                    class="flex items-center gap-1.5 bg-emerald-500 border border-emerald-600 px-4 py-1.5 rounded-full text-white text-sm font-extrabold shadow-sm">
+                    <span id="copies-count">0</span>
+                    <span>Copy</span>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+
+</body>
+
+</html>
