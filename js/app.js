@@ -367,3 +367,137 @@ function toggleHeart(button, serviceId) {
 
     updateNavbarCounters();
 }
+
+// Copy Hotline Number and update counters 
+function copyServiceToClipboard(serviceId) {
+    const service = HOTLINE_SERVICES.find(s => s.id === serviceId);
+    if (!service) return;
+
+    const name = appState.language === "bn" ? service.nameBn : service.nameEn;
+
+    navigator.clipboard.writeText(service.number)
+        .then(() => {
+            appState.copies += 1;
+            updateNavbarCounters();
+            showToast(appState.language === "bn" ? `হটলাইন কপি করা হয়েছে: ${name} (${service.number})! 📋` : `Copied ${name} Hotline (${service.number})! 📋`, "success");
+        })
+        .catch((err) => {
+            console.error("Failed to copy clipboard content:", err);
+            showToast(appState.language === "bn" ? "কপি করতে ব্যর্থ হয়েছে" : "Failed to copy number", "error");
+        });
+}
+
+// Call Service & Coin Deduction 
+let activeCallTimeout = null;
+
+function initiateCall(serviceId) {
+    const service = HOTLINE_SERVICES.find(s => s.id === serviceId);
+    if (!service) return;
+
+    const name = appState.language === "bn" ? service.nameBn : service.nameEn;
+
+    // Check if user has sufficient coins
+    if (appState.coins < 20) {
+        showToast(appState.language === "bn" ? "পর্যাপ্ত কয়েন নেই! কল করতে ২০ 🪙 প্রয়োজন।" : "Insufficient Coins! Call costs 20 🪙.", "error");
+        return;
+    }
+    // Deduct 20 coins
+    appState.coins -= 20;
+    updateNavbarCounters();
+
+    // Display the simulated calling overlay modal
+    if (elements.callModal) {
+        elements.modalServiceIcon.src = service.icon;
+        elements.modalServiceName.textContent = name;
+        elements.modalServiceNumber.textContent = service.number;
+        elements.callModal.classList.add("active");
+    }
+
+    // Auto-connect call after 3.5 seconds of calling
+    activeCallTimeout = setTimeout(() => {
+        closeCallModal();
+
+        // Get call connection local timestamp 
+        const callTime = new Date().toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: true
+        });
+
+        // Add call record to state
+        appState.callHistory.unshift({
+            serviceId: serviceId,
+            time: callTime
+        });
+
+        // Update history UI list
+        renderHistory();
+
+        showToast(appState.language === "bn" ? `${name} এর সাথে সংযোগ স্থাপন করা হয়েছে! 📞` : `Connected to ${name}! 📞`, "success");
+    }, 3500);
+}
+
+// Close the calling overlay modal
+function closeCallModal() {
+    if (elements.callModal) {
+        elements.callModal.classList.remove("active");
+    }
+    if (activeCallTimeout) {
+        clearTimeout(activeCallTimeout);
+        activeCallTimeout = null;
+    }
+}
+
+// Add/Render call history panel dynamically
+function renderHistory() {
+    if (!elements.historyList) return;
+
+    elements.historyList.innerHTML = "";
+
+    if (appState.callHistory.length === 0) {
+        if (elements.emptyHistoryPlaceholder) {
+            elements.emptyHistoryPlaceholder.classList.remove("hidden");
+        }
+        return;
+    }
+
+    if (elements.emptyHistoryPlaceholder) {
+        elements.emptyHistoryPlaceholder.classList.add("hidden");
+    }
+
+    appState.callHistory.forEach(callItem => {
+        const service = HOTLINE_SERVICES.find(s => s.id === callItem.serviceId);
+        if (!service) return;
+
+        const name = appState.language === "bn" ? service.nameBn : service.nameEn;
+
+        // Create list item element 
+        const item = document.createElement("div");
+        item.className = "flex items-center justify-between p-3.5 rounded-2xl bg-white border border-slate-100 hover:border-slate-200 transition-all duration-300 gap-3 animate-slide-up shadow-sm";
+
+        item.innerHTML = `
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center p-2">
+          <img src="${service.icon}" alt="${name}" class="w-full h-full object-contain">
+        </div>
+        <div>
+          <h4 class="text-sm font-extrabold text-slate-800 leading-tight">
+            ${name}
+          </h4>
+          <p class="text-xs font-mono font-bold text-slate-400 mt-0.5">
+            ${service.number}
+          </p>
+        </div>
+      </div>
+      
+      <div class="flex flex-col items-end gap-1">
+        <span class="text-[10px] font-bold text-slate-400 bg-slate-50 border border-slate-150 py-1 px-2.5 rounded-full select-none">
+          ${callItem.time}
+        </span>
+      </div>
+    `;
+        elements.historyList.appendChild(item);
+    });
+}
+
